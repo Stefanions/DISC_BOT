@@ -1,5 +1,3 @@
-#ADSasDASDasdaSDASDaSDaSD
-#Asdasdasdasdasdasd
 #Файл с основными командами
 #Подключение библиотек
 import res
