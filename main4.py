@@ -1,3 +1,5 @@
+#ADSasDASDasdaSDASDaSDaSD
+#Asdasdasdasdasdasd
 #Файл с основными командами
 #Подключение библиотек
 import res
@@ -21,7 +23,6 @@ class main_but(View):
     async def button_callback(self, interaction, button):
         await interaction.response.defer()
         await Intro_LS(interaction.user)
-
 
 
 
