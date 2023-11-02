@@ -10,7 +10,7 @@ from discord.ext import commands
 from discord.ui import Button, View, Select
 import numpy as np
 import question
-from question import AnswerView
+import embed
 
 #Базовые структуры
 class Main(commands.Bot):
@@ -33,87 +33,33 @@ class main_but(View):
 ###########################################Функциии разные########################################
 #Функция разговора бота в ЛС
 async def Intro_LS(user):
-    # Создаем объект Embed
-    title1 = discord.Embed(
-        title="Добро пожаловать в Академию ССО!",
-        description=(
-            "Прежде чем мы с тобой начнем взаимодействовать, нам нужно подробнее узнать о тебе. "
-            "\n\nГляди! Я снизу отправил тебе вопросы, ответь на них. Затем, нажми кнопку - 'завершить знакомство' и ты получишь доступ к Академии!\n\n"
-            "p.s После прохождения формы, ты получишь доступ к Академии. Что тебе там делать?\n\n"
-            "1) Жди тренировок.\n Их ты можешь найти в канале анонс-тренировок. Обязательно отмечайся!\n\n"
-            "2) Просто присоединяйся в канал.\n Знакомься, но обязательно скажи, что ты только присоединился, что бы ребята понимали, что, возможно, тебе нужно помочь освоится."
-        ),
-        color=discord.Color.from_rgb(255, 255, 255) # ебашим белой полосочкой, иначе некрасиво)
-    )
-    await user.send(embed=title1)
 
-    #Тут создаю окошечко для наших
+    #Тут создаю окошечко для наших селектов и строк
     s = View()
+
+    #Приветственное сообщение
+    await user.send(embed=embed.emb_1)
+
+    #1 вопрос
+    await question.q_1(user, bot)
     
-    #1 вопрос old
-    # @bot.command()
-    # async def ask(ctx):
-    # Создаем экземпляр класса с полем для ввода
-    # view = question.AnswerView()
-
-    # Отправляем сообщение с полем для ввода в личные сообщения пользователя
-    # await ctx.author.send("Пожалуйста, введите ваш ответ:", view=view)
-
-    # Ожидаем ответа пользователя
-    # response = await bot.wait_for("message", check=lambda message: message.author == ctx.author and message.channel.type == discord.ChannelType.private)
-
-    # Печатаем ответ в консоль для демонстрации
-    # print(f"Получен ответ: {response.content}")
-
-    # Опционально, можно отправить подтверждение о получении ответа
-    # await ctx.author.send(f"Спасибо за ваш ответ: {response.content}")
-
-    #1 вопрос new
-    e1 = discord.Embed(
-        title="Укажите ваш никнейм в игре",
-        color=discord.Color.from_rgb(139, 187, 236)
-        )
-    s1 = AnswerView()
-    s.add_item(s1)
-    await user.send(embed=e1, view = s)
-    s.clear_items()
+    #4 вопрос
+    s.add_item(question.q_4())
+    await user.send(embed=embed.emb_4, view = s)
 
     #6 вопрос
-    e6 = discord.Embed(
-        title="Выбери одну роль (стрелковую специальность), номер один для тебя?",
-        color=discord.Color.from_rgb(139, 187, 236)
-        )
-    s6 = question.q6()
-    s.add_item(s6)
-    await user.send(embed=e6, view = s)
     s.clear_items()
-
+    s.add_item(question.q_6())
+    await user.send(embed=embed.emb_6, view = s)
 
     #7 вопрос
-    e7 = discord.Embed(
-        title="Выбери дополнительные 2 или более роли, помимо основной",
-        color=discord.Color.from_rgb(139, 187, 236)
-        )
-    s7 = question.q7()
-    s.add_item(s7)
-    await user.send(embed=e7, view = s)
     s.clear_items()
-
-
-
-
-
-#Обработка селекта
-@bot.event
-async def on_select(ctx, intraction):
-    print("Я тут")
-
-#обработка ансвера
-@bot.command()
-async def ask(ctx):
-    await user.author.send("Пожалуйста, введите ваш ответ:", view=s)
-    response = await bot.wait_for("message", check=lambda message: message.author == ctx.author and message.channel.type == discord.ChannelType.private)
-    print(f"Получен ответ: {response.content}")
+    s.add_item(question.q_7())
+    await user.send(embed=embed.emb_7, view = s)
+    
+    #8 вопрос
+    s.clear_items()
+    await question.q_8(user, bot)
 
 #При включении бота
 @bot.event
