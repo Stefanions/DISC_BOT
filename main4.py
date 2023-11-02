@@ -41,16 +41,22 @@ async def Intro_LS(user):
     await user.send(embed=embed.emb_1)
 
     #### 1 вопрос
+    e_1 = embed.emb_2("Напиши свой никнейм в игре.")
+    await user.send(embed=e_1.emb_2)
     await question.q_1(user, bot)
-
-
+    
     #### 2 вопрос
-    # s.clear_items()
-    # s.add_item(question.q_2())
-    # await user.send(embed=embed.emb_2, view = s)
+    s.clear_items()
+    e_2 = embed.emb_2("В какое время относительно МСК ты играешь в основном?")
+    s.add_item(question.q_2())
+    await user.send(embed=e_2.emb_2, view = s)
+
 
     #### 3 вопрос    
     s.clear_items()
+    s.add_item(question.q_3())
+    e_3 = embed.emb_2("Какой у тебя часовой пояс?")
+    await user.send(embed=e_3.emb, view = s)
 
     #### 4 вопрос
     s.clear_items()
@@ -61,6 +67,7 @@ async def Intro_LS(user):
 
     #### 5 вопрос    
     s.clear_items()
+
 
     #### 6 вопрос
     s.clear_items()
@@ -78,12 +85,16 @@ async def Intro_LS(user):
 
     #### 8 вопрос
     s.clear_items()
+    e_8 = embed.emb_2("Ты понимаешь, что для того, что бы играть командно, нужно, что бы все делали одинаково?\nЭто \"одинаково\" - мы научим тебя делать, но не все может получатся сразу")
+    await user.send(embed=e_8.emb_2)
     await question.q_8(user, bot)
 
 
     #### 9 вопрос    
     s.clear_items()
-
+    e_9 = embed.emb_2("Сколько тебе лет?")
+    await user.send(embed=e_9.emb_2)
+    await question.q_9(user, bot)
 
     #### 10 вопрос
     s.clear_items()
@@ -103,7 +114,9 @@ async def Intro_LS(user):
 
     #### 14 вопрос
     s.clear_items()
-
+    e_14 = embed.emb_2("Откуда вы о нас узнали?\nЕсли вас пригласили, обязательно напишите ник человека, кто это сделал (Хотя бы примерный, мы поймем xD)")
+    await user.send(embed=e_14.emb_2)
+    await question.q_14(user, bot)
 
 
 #При включении бота
