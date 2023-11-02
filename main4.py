@@ -10,6 +10,7 @@ from discord.ext import commands
 from discord.ui import Button, View, Select
 import numpy as np
 import question
+from question import AnswerView
 
 #Базовые структуры
 class Main(commands.Bot):
@@ -49,6 +50,34 @@ async def Intro_LS(user):
     #Тут создаю окошечко для наших
     s = View()
     
+    #1 вопрос old
+    # @bot.command()
+    # async def ask(ctx):
+    # Создаем экземпляр класса с полем для ввода
+    # view = question.AnswerView()
+
+    # Отправляем сообщение с полем для ввода в личные сообщения пользователя
+    # await ctx.author.send("Пожалуйста, введите ваш ответ:", view=view)
+
+    # Ожидаем ответа пользователя
+    # response = await bot.wait_for("message", check=lambda message: message.author == ctx.author and message.channel.type == discord.ChannelType.private)
+
+    # Печатаем ответ в консоль для демонстрации
+    # print(f"Получен ответ: {response.content}")
+
+    # Опционально, можно отправить подтверждение о получении ответа
+    # await ctx.author.send(f"Спасибо за ваш ответ: {response.content}")
+
+    #1 вопрос new
+    e1 = discord.Embed(
+        title="Укажите ваш никнейм в игре",
+        color=discord.Color.from_rgb(139, 187, 236)
+        )
+    s1 = AnswerView()
+    s.add_item(s1)
+    await user.send(embed=e1, view = s)
+    s.clear_items()
+
     #6 вопрос
     e6 = discord.Embed(
         title="Выбери одну роль (стрелковую специальность), номер один для тебя?",
@@ -58,6 +87,7 @@ async def Intro_LS(user):
     s.add_item(s6)
     await user.send(embed=e6, view = s)
     s.clear_items()
+
 
     #7 вопрос
     e7 = discord.Embed(
@@ -77,6 +107,13 @@ async def Intro_LS(user):
 @bot.event
 async def on_select(ctx, intraction):
     print("Я тут")
+
+#обработка ансвера
+@bot.command()
+async def ask(ctx):
+    await user.author.send("Пожалуйста, введите ваш ответ:", view=s)
+    response = await bot.wait_for("message", check=lambda message: message.author == ctx.author and message.channel.type == discord.ChannelType.private)
+    print(f"Получен ответ: {response.content}")
 
 #При включении бота
 @bot.event

@@ -7,7 +7,7 @@ import numpy as np
 
 ##############################################Селекты##############################################
 
-#6 вопрос
+####### 6 вопрос
 class q6(Select):
     def __init__(self): 
         super().__init__(
@@ -31,7 +31,7 @@ class q6(Select):
         await interaction.response.defer()
         print("Ответ6")
 
-#7 вопрос
+####### 7 вопрос
 class q7(Select):
     def __init__(self): 
         super().__init__(
@@ -56,3 +56,21 @@ class q7(Select):
     async def callback(self, interaction):
         await interaction.response.defer()
         print("Ответ7")
+
+
+################################## asnwers ###############################################
+
+####### 1 вопрос
+
+class AnswerView(discord.ui.View):
+    def __init__(self):
+        super().__init__(timeout=None)
+
+        # Добавляем поле ввода
+        self.input_field = discord.ui.TextInput(
+            placeholder="Введите ваш ответ...",
+            min_length=1,  # Минимальная длина ответа (в данном случае, 1 символ)
+            max_length=100,  # Максимальная длина ответа (в данном случае, 100 символов)
+            label="Ваш ответ:"
+        )
+        self.add_item(self.input_field)
