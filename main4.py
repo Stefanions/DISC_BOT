@@ -31,7 +31,7 @@ class main_but(View):
 
 
 ###########################################Функциии разные########################################
-#Функция разговора бота в ЛС
+#Функция прохождения первого собеседования в личных сообщенях
 async def Intro_LS(user):
 
     #Тут создаю окошечко для наших селектов и строк
@@ -40,26 +40,71 @@ async def Intro_LS(user):
     #Приветственное сообщение
     await user.send(embed=embed.emb_1)
 
-    #1 вопрос
+    #### 1 вопрос
     await question.q_1(user, bot)
-    
-    #4 вопрос
-    s.add_item(question.q_4())
-    await user.send(embed=embed.emb_4, view = s)
 
-    #6 вопрос
+
+    #### 2 вопрос
+    # s.clear_items()
+    # s.add_item(question.q_2())
+    # await user.send(embed=embed.emb_2, view = s)
+
+    #### 3 вопрос    
+    s.clear_items()
+
+    #### 4 вопрос
+    s.clear_items()
+    s.add_item(question.q_4())
+    e_4 = embed.emb_2("Сколько у тебя часов в SQUAD?")
+    await user.send(embed=e_4.emb, view = s)
+
+
+    #### 5 вопрос    
+    s.clear_items()
+
+    #### 6 вопрос
     s.clear_items()
     s.add_item(question.q_6())
-    await user.send(embed=embed.emb_6, view = s)
+    e_6 = embed.emb_2("Выбери одну роль (стрелковую специальность), номер один для тебя?")
+    await user.send(embed=e_6.emb, view = s)
 
-    #7 вопрос
+
+    #### 7 вопрос
     s.clear_items()
     s.add_item(question.q_7())
-    await user.send(embed=embed.emb_7, view = s)
+    e_7 = embed.emb_2("Выбери дополнительные 2 или более роли, помимо основной. Напиши их ниже.")
+    await user.send(embed=e_7.emb, view = s)
     
-    #8 вопрос
+
+    #### 8 вопрос
     s.clear_items()
     await question.q_8(user, bot)
+
+
+    #### 9 вопрос    
+    s.clear_items()
+
+
+    #### 10 вопрос
+    s.clear_items()
+
+
+    #### 11 вопрос
+    s.clear_items()
+
+
+    #### 12 вопрос
+    s.clear_items()
+
+
+    #### 13 вопрос
+    s.clear_items()
+
+
+    #### 14 вопрос
+    s.clear_items()
+
+
 
 #При включении бота
 @bot.event

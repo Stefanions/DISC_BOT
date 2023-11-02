@@ -16,6 +16,24 @@ async def q_1(user, bot):
     print(f"Ваш никнейм : {mes.content}")
 
 
+####### 2 вопрос #######
+class q_2(Select):
+    def __init__(self): 
+        super().__init__(
+        placeholder="В какое время относительно МСК ты играешь в основном?", 
+        options=[
+        discord.SelectOption(label="0-50 часов", value="otp1"),
+        discord.SelectOption(label="50+ часов", value="otp2"),
+        discord.SelectOption(label="100+ часов", value="otp3"),
+        discord.SelectOption(label="250+ часов", value="otp4"),
+        discord.SelectOption(label="500+ часов", value="otp5"),
+        discord.SelectOption(label="1000+ часов", value="otp6"),
+        discord.SelectOption(label="2000+ часов", value="otp7")
+        ], 
+        custom_id="s_2")
+    async def callback(self, interaction):
+        await interaction.response.defer()
+        print("Ответ2")
 
 
 ####### 4 вопрос #######
@@ -33,7 +51,7 @@ class q_4(Select):
         discord.SelectOption(label="1000+ часов", value="otp6"),
         discord.SelectOption(label="2000+ часов", value="otp7")
         ], 
-        custom_id="s_1")
+        custom_id="s_4")
     async def callback(self, interaction):
         await interaction.response.defer()
         print("Ответ4")
@@ -57,7 +75,7 @@ class q_6(Select):
         discord.SelectOption(label="Танкист-стрелок", value="op11"),
         discord.SelectOption(label="Пилот", value="op12")
         ], 
-        custom_id="s_2")
+        custom_id="s_6")
     async def callback(self, interaction):
         await interaction.response.defer()
         print("Ответ6")
