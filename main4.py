@@ -69,14 +69,32 @@ async def Intro_LS(user):
     # await ctx.author.send(f"Спасибо за ваш ответ: {response.content}")
 
     #1 вопрос new
+    # e1 = discord.Embed(
+    #     title="Укажите ваш никнейм в игре",
+    #     color=discord.Color.from_rgb(139, 187, 236)
+    #     )
+    # s1 = AnswerView()
+    # s.add_item(s1)
+    # await user.send(embed=e1, view = s)
+    # s.clear_items()
+
+    #1 вопрос new v2
     e1 = discord.Embed(
         title="Укажите ваш никнейм в игре",
         color=discord.Color.from_rgb(139, 187, 236)
-        )
-    s1 = AnswerView()
-    s.add_item(s1)
-    await user.send(embed=e1, view = s)
-    s.clear_items()
+    )
+    s1 = View()  # Создаем новый View для этого вопроса
+
+    input_field = discord.ui.TextInput(
+        placeholder="Введите ваш ответ...",
+        min_length=1,
+        max_length=100,
+        label="Ваш ответ:"
+    )
+    s1.add_item(input_field)
+
+    await user.send(embed=e1, view=s1)
+    s1.clear_items()
 
     #6 вопрос
     e6 = discord.Embed(

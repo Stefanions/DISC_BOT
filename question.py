@@ -65,12 +65,3 @@ class q7(Select):
 class AnswerView(discord.ui.View):
     def __init__(self):
         super().__init__(timeout=None)
-
-        # Добавляем поле ввода
-        self.input_field = discord.ui.TextInput(
-            placeholder="Введите ваш ответ...",
-            min_length=1,  # Минимальная длина ответа (в данном случае, 1 символ)
-            max_length=100,  # Максимальная длина ответа (в данном случае, 100 символов)
-            label="Ваш ответ:"
-        )
-        self.add_item(self.input_field)
