@@ -170,3 +170,6 @@ async def on_select(ctx, interaction):
  что означает, что сообщение будет видно только отправителю и не будет видно другим участникам сервера.
 Не забудьте подставить свой собственный `custom_id`, если он отличается от 'menu'.
  
+
+
+ https://gist.github.com/AkshuAgarwal/bc7d45bcecd5d29de4d6d7904e8b8bd8#examples - крутые команды.
