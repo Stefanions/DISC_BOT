@@ -29,7 +29,8 @@ class q_2(Select):
         discord.SelectOption(label="Вечером по МСК", value="prime_3"),
         discord.SelectOption(label="Ночью по МСК", value="prime_4")
         ], 
-        custom_id="s_2")
+        custom_id="s_2"
+        )
     async def callback(self, interaction):
         await interaction.response.defer()
         print("Ответ2")
