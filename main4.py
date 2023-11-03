@@ -18,21 +18,53 @@ class Main(commands.Bot):
         super().__init__(*args, **kwargs)
 
 bot = Main(command_prefix = ".",intents = discord.Intents.all(),help_command = None)
-
 ###########################################Классы кнопок########################################
 #Кнопка при вступлении
 class main_but(View):
     @discord.ui.button(label = "Пройти опрос", style=discord.ButtonStyle.danger)
     async def button_callback(self, interaction, button):
         await interaction.response.defer()
-        await Intro_LS(interaction.user)
+        print("main_but")
+        await Clean_and_Intro_LS(interaction.user)
+        
+
+
+#Кнопка после ввода ответов на тест
+class main_resualt_but(View):
+    @discord.ui.button(label = "Закончить опрос", style=discord.ButtonStyle.danger)
+    async def button_callback(self, interaction, button):
+        await interaction.response.defer()
 
 
 
 ###########################################Функциии разные########################################
-#Функция прохождения первого собеседования в личных сообщенях
-async def Intro_LS(user):
 
+#Для отслеживания людей, которые не прошли собеседование в личных сообщений бота до конца
+mem_not_end_opr = []
+
+
+
+#Очистка сообщений + вызов функции
+async def Clean_and_Intro_LS(user):
+    # #Удаление сообщений
+    # await user.send("Привет")
+    # channel = bot.get_channel(user.dm_channel.id)
+    # async for message in channel.history(limit=None):
+    #     if message.author.id == bot.user.id:
+    #         try:
+    #             await message.delete()
+    #         except discord.errors.NotFound:
+    #             pass
+
+    if user.id in mem_not_end_opr:
+        return
+    else:
+        mem_not_end_opr.append(user.id)
+
+    await Intro_LS(user)
+
+#Функция прохождения первого собеседования в личных сообщения бота
+async def Intro_LS(user):
     #Проверка на выбор селекта 
     def check(interaction):
         custom_id = interaction.data['custom_id']
@@ -40,7 +72,7 @@ async def Intro_LS(user):
 
     #Тут создаю окошечко для наших селектов и строк
     s = View()
-
+    
     #Приветственное сообщение
     await user.send(embed=embed.emb_1)
     
@@ -48,7 +80,7 @@ async def Intro_LS(user):
     e_1 = embed.emb_2("Напиши свой никнейм в игре.")
     await user.send(embed=e_1.emb)
     await question.q_1(user, bot)
-    
+
     #### 2 вопрос rdy 
     sel = "s_2"
     s.clear_items()
@@ -56,6 +88,7 @@ async def Intro_LS(user):
     s.add_item(question.q_2())
     await user.send(embed=e_2.emb, view = s)
     await bot.wait_for('interaction', check=check)
+
 
     #### 3 вопрос rdy
     sel = "s_3"
@@ -73,7 +106,6 @@ async def Intro_LS(user):
     await user.send(embed=e_4.emb, view = s)
     await bot.wait_for('interaction', check=check)
 
-
     #### 5 вопрос rdy
     sel = "s_5"
     s.clear_items()
@@ -90,7 +122,6 @@ async def Intro_LS(user):
     await user.send(embed=e_6.emb, view = s)
     await bot.wait_for('interaction', check=check)
 
-
     #### 7 вопрос rdy
     sel = "s_7"
     s.clear_items()
@@ -99,14 +130,12 @@ async def Intro_LS(user):
     await user.send(embed=e_7.emb, view = s)
     await bot.wait_for('interaction', check=check)
     
-
     #### 8 вопрос
     sel = "s_8"
     s.clear_items()
     e_8 = embed.emb_2("Ты понимаешь, что для того, что бы играть командно, нужно, что бы все делали одинаково?\nЭто \"одинаково\" - мы научим тебя делать, но не все может получатся сразу")
     await user.send(embed=e_8.emb)
     await question.q_8(user, bot)
-
 
     #### 9 вопрос   
     sel = "s_9" 
@@ -122,7 +151,6 @@ async def Intro_LS(user):
     s.add_item(question.q_10())
     await user.send(embed=e_10.emb, view = s)
     await bot.wait_for('interaction', check=check)
-
 
     #### 11 вопрос rdy
     sel = "s_11"
@@ -156,6 +184,22 @@ async def Intro_LS(user):
     await question.q_14(user, bot)
 
 
+    #Результирующая кнопка 
+    but_rez = main_resualt_but()
+    await user.send(view=but_rez)
+
+
+
+    print(mem_not_end_opr)
+    mem_not_end_opr.remove(user.id)
+    print(mem_not_end_opr)
+    return
+
+
+
+
+
+
 #При включении бота
 @bot.event
 async def on_ready():
@@ -171,11 +215,6 @@ async def on_ready():
     print("I am here")
     but_main = main_but()
     await channel.send("Я начал работу", view=but_main)
-
-# #При взаимодействии
-# @bot.event
-# async def on_interaction(interaction):
-#     print("on_interaction")
 
 
 

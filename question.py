@@ -8,13 +8,11 @@ import numpy as np
 
 
 ##############################################Селекты и не только + разные конструкции##############################################
-
 ####### 1 вопрос #######
 async def q_1(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
     mes = await bot.wait_for('message', check=check)
-
 
 ####### 2 вопрос #######
 class q_2(Select):
@@ -33,7 +31,7 @@ class q_2(Select):
         )
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ2")
+        print(interaction.data)
 
 
 
