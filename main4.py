@@ -141,18 +141,11 @@ async def on_ready():
                 await message.delete()
             except discord.errors.NotFound:
                 pass
-
     #Начальная кнопка
     print("I am here")
     but_main = main_but()
     await channel.send("Я начал работу", view=but_main)
 
-@bot.event
-async def on_interaction(interaction):
-    print("on_interaction")
-        
-
 
 
 bot.run(res.token)
-

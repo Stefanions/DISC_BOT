@@ -9,31 +9,11 @@ import numpy as np
 
 ##############################################Селекты и не только + разные конструкции##############################################
 
-# # шаблон
-# class q_?(Select):
-#     def __init__(self): 
-#         super().__init__(
-#         placeholder="Список большой, листай вниз!", 
-#         options=[
-#         discord.SelectOption(label="0-50 часов", value="hours_1"),
-#         discord.SelectOption(label="50+ часов", value="hours_2")
-#         ], 
-#         custom_id="s_?")
-#     async def callback(self, interaction):
-#         await interaction.response.defer()
-#         print("Ответ?")
-
-
-# async def check(user):
-#     if user.id == message.author.id:
-#         return True
-
-
 ####### 1 вопрос #######
 async def q_1(user, bot):
-    mes = await bot.wait_for('message', check=check(user))
-    #await bot.wait_for('message', check=check(user, mes))
-    #print(f"Ваш никнейм : {mes.content}")
+    def check(message):
+        return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
+    mes = await bot.wait_for('message', check=check)
 
 
 ####### 2 вопрос #######
@@ -201,11 +181,18 @@ class q_7(Select):
 
 ####### 8 вопрос #######
 async def q_8(user, bot):
-    mes = await bot.wait_for('message')
+    def check(message):
+        return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
+    mes = await bot.wait_for('message', check=check)
+
 
 ####### 9 вопрос #######
 async def q_9(user, bot):
-    mes = await bot.wait_for('message')
+    def check(message):
+        return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
+    mes = await bot.wait_for('message', check=check)
+
+    
 
 
 ####### 10 вопрос
@@ -297,4 +284,6 @@ class q_13(Select):
 
 ####### 14 вопрос #######
 async def q_14(user, bot):
-    mes = await bot.wait_for('message')
+    def check(message):
+        return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
+    mes = await bot.wait_for('message', check=check)
