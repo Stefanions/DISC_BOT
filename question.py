@@ -5,7 +5,8 @@ from discord.ext import commands
 from discord.ui import Button, View, Select
 import numpy as np
 
-
+#HASH_MAP для запоминания ответов людей, которые проходят тест
+mem_data = {}
 
 ##############################################Селекты и не только + разные конструкции##############################################
 ####### 1 вопрос #######
@@ -13,6 +14,7 @@ async def q_1(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
     mes = await bot.wait_for('message', check=check)
+    mem_data[user.id].nick = mes.content  
 
 ####### 2 вопрос #######
 class q_2(Select):
@@ -22,18 +24,31 @@ class q_2(Select):
         min_values = 1,
         max_values = 4,
         options=[
-        discord.SelectOption(label="Утром по МСК", value="prime_1"),
-        discord.SelectOption(label="Денём по МСК", value="prime_2"),
-        discord.SelectOption(label="Вечером по МСК", value="prime_3"),
-        discord.SelectOption(label="Ночью по МСК", value="prime_4")
+        discord.SelectOption(label="Утром по МСК", value="1"),
+        discord.SelectOption(label="Днём по МСК", value="2"),
+        discord.SelectOption(label="Вечером по МСК", value="3"),
+        discord.SelectOption(label="Ночью по МСК", value="4")
         ], 
         custom_id="s_2"
         )
     async def callback(self, interaction):
         await interaction.response.defer()
-        print(interaction.data)
+        value = interaction.data['values']
+        value_int = [int(x) for x in value]
+        mem_data[interaction.user.id].id_main_time = value_int
 
+        #-----------------------------#
+        label_value = {}
+        rez_label = []
+        #Вытягиваю из селекта хэшмапу
+        for i in (self.options):
+            label_value[i.value] = i.label
+        #Отбираю нужные лейблы
+        for i in (value):
+            rez_label.append(label_value[i])
+        #-----------------------------#
 
+        mem_data[interaction.user.id].main_time = rez_label
 
 ####### 3 вопрос #######
 class q_3(Select):
@@ -82,7 +97,8 @@ class q_3(Select):
         custom_id="s_3")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ3")
+        value = interaction.data['values']
+        mem_data[interaction.user.id].time_zone = value
 
 
 ####### 4 вопрос #######
@@ -91,18 +107,27 @@ class q_4(Select):
         super().__init__(
         placeholder="Список большой, листай вниз!", 
         options=[
-        discord.SelectOption(label="0-50 часов", value="hours_1"),
-        discord.SelectOption(label="50+ часов", value="hours_2"),
-        discord.SelectOption(label="100+ часов", value="hours_3"),
-        discord.SelectOption(label="250+ часов", value="hours_4"),
-        discord.SelectOption(label="500+ часов", value="hours_5"),
-        discord.SelectOption(label="1000+ часов", value="hours_6"),
-        discord.SelectOption(label="2000+ часов", value="hours_7")
+        discord.SelectOption(label="0-50 часов", value="5"),
+        discord.SelectOption(label="50+ часов", value="6"),
+        discord.SelectOption(label="100+ часов", value="7"),
+        discord.SelectOption(label="250+ часов", value="8"),
+        discord.SelectOption(label="500+ часов", value="9"),
+        discord.SelectOption(label="1000+ часов", value="10"),
+        discord.SelectOption(label="2000+ часов", value="11")
         ], 
         custom_id="s_4")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ4")
+        value = interaction.data['values']
+        mem_data[interaction.user.id].id_hours = int(value[0])
+        #-----------------------------#
+        label_value = {}
+        #Вытягиваю из селекта хэшмапу
+        for i in (self.options):
+            label_value[i.value] = i.label
+        #-----------------------------#
+        mem_data[interaction.user.id].hours = label_value[value[0]]
+
 
 
 ####### 5 вопрос #######
@@ -111,20 +136,27 @@ class q_5(Select):
         super().__init__(
         placeholder="Список большой, листай вниз!", 
         options=[
-        discord.SelectOption(label="CMD подразделение", value="podraz_1"),
-        discord.SelectOption(label="Атакующее подразделение", value="podraz_2"),
-        discord.SelectOption(label="ДРГ подразделение", value="podraz_3"),
-        discord.SelectOption(label="Оборонительное подразделение", value="podraz_4"),
-        discord.SelectOption(label="Стройбат подразделение", value="podraz_5"),
-        discord.SelectOption(label="Минометное подразделение", value="podraz_6"),
-        discord.SelectOption(label="Техническое подразделение", value="podraz_7"),
-        discord.SelectOption(label="Пилотное подразделение", value="podraz_8")
+        discord.SelectOption(label="CMD подразделение", value="12"),
+        discord.SelectOption(label="Атакующее подразделение", value="13"),
+        discord.SelectOption(label="ДРГ подразделение", value="14"),
+        discord.SelectOption(label="Оборонительное подразделение", value="15"),
+        discord.SelectOption(label="Стройбат подразделение", value="16"),
+        discord.SelectOption(label="Минометное подразделение", value="17"),
+        discord.SelectOption(label="Техническое подразделение", value="18"),
+        discord.SelectOption(label="Пилотное подразделение", value="19")
         ], 
         custom_id="s_5")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ5")
-
+        value = interaction.data['values']
+        mem_data[interaction.user.id].id_direction = int(value[0])
+        #-----------------------------#
+        label_value = {}
+        #Вытягиваю из селекта хэшмапу
+        for i in (self.options):
+            label_value[i.value] = i.label
+        #-----------------------------#
+        mem_data[interaction.user.id].direction = label_value[value[0]]
 
 ####### 6 вопрос #######
 class q_6(Select):
@@ -132,23 +164,31 @@ class q_6(Select):
         super().__init__(
         placeholder="Список большой, листай вниз!", 
         options=[
-        discord.SelectOption(label="CMD", value="osn_stg_cmd"),
-        discord.SelectOption(label="Сквадной", value="osn_stg_sl"),
-        discord.SelectOption(label="Лидер Фаер Тимы", value="osn_stg_flt"),
-        discord.SelectOption(label="Обычный стрелок", value="osn_stg_rfl"),
-        discord.SelectOption(label="Стрелок ГП", value="osn_stg_gl"),
-        discord.SelectOption(label="Труба", value="osn_stg_rpg"),
-        discord.SelectOption(label="Медик", value="osn_stg_med"),
-        discord.SelectOption(label="Пулеметчик", value="osn_stg_mach"),
-        discord.SelectOption(label="Такнкист-командир", value="osn_stg_tank_sl"),
-        discord.SelectOption(label="Танкист-водитель", value="osn_stg_tnak_mehv"),
-        discord.SelectOption(label="Танкист-стрелок", value="osn_stg_tank_bash"),
-        discord.SelectOption(label="Пилот", value="osn_stg_pilt")
+        discord.SelectOption(label="CMD", value="20"),
+        discord.SelectOption(label="Сквадной", value="21"),
+        discord.SelectOption(label="Лидер Фаер Тимы", value="22"),
+        discord.SelectOption(label="Обычный стрелок", value="23"),
+        discord.SelectOption(label="Стрелок ГП", value="24"),
+        discord.SelectOption(label="Труба", value="25"),
+        discord.SelectOption(label="Медик", value="26"),
+        discord.SelectOption(label="Пулеметчик", value="27"),
+        discord.SelectOption(label="Такнкист-командир", value="28"),
+        discord.SelectOption(label="Танкист-водитель", value="29"),
+        discord.SelectOption(label="Танкист-стрелок", value="30"),
+        discord.SelectOption(label="Пилот", value="31")
         ], 
         custom_id="s_6")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ6")
+        value = interaction.data['values']
+        mem_data[interaction.user.id].id_main_game_role = int(value[0])
+        #-----------------------------#
+        label_value = {}
+        #Вытягиваю из селекта хэшмапу
+        for i in (self.options):
+            label_value[i.value] = i.label
+        #-----------------------------#
+        mem_data[interaction.user.id].main_game_role = label_value[value[0]]
 
 
 ####### 7 вопрос
@@ -159,23 +199,38 @@ class q_7(Select):
         min_values = 2,
         max_values = 12,
         options=[
-        discord.SelectOption(label="CMD", value="dop_stg_cmd"),
-        discord.SelectOption(label="Сквадной", value="dop_stg_sl"),
-        discord.SelectOption(label="Лидер Фаер Тимы", value="dop_stg_flt"),
-        discord.SelectOption(label="Обычный стрелок", value="dop_stg_rfl"),
-        discord.SelectOption(label="Стрелок ГП", value="dop_stg_gl"),
-        discord.SelectOption(label="Труба", value="dop_stg_rpg"),
-        discord.SelectOption(label="Медик", value="dop_stg_med"),
-        discord.SelectOption(label="Пулеметчик", value="dop_stg_mach"),
-        discord.SelectOption(label="Такнкист-командир", value="dop_stg_tank_sl"),
-        discord.SelectOption(label="Танкист-водитель", value="dop_stg_tnak_mehv"),
-        discord.SelectOption(label="Танкист-стрелок", value="dop_stg_tank_bash"),
-        discord.SelectOption(label="Пилот", value="dop_stg_pilt")
+        discord.SelectOption(label="CMD", value="32"),
+        discord.SelectOption(label="Сквадной", value="33"),
+        discord.SelectOption(label="Лидер Фаер Тимы", value="34"),
+        discord.SelectOption(label="Обычный стрелок", value="35"),
+        discord.SelectOption(label="Стрелок ГП", value="36"),
+        discord.SelectOption(label="Труба", value="37"),
+        discord.SelectOption(label="Медик", value="38"),
+        discord.SelectOption(label="Пулеметчик", value="39"),
+        discord.SelectOption(label="Такнкист-командир", value="40"),
+        discord.SelectOption(label="Танкист-водитель", value="41"),
+        discord.SelectOption(label="Танкист-стрелок", value="42"),
+        discord.SelectOption(label="Пилот", value="43")
         ], 
         custom_id="s_7")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ7")
+        value = interaction.data['values']
+        value_int = [int(x) for x in value]
+        mem_data[interaction.user.id].id_game_role = value_int
+
+        #-----------------------------#
+        label_value = {}
+        rez_label = []
+        #Вытягиваю из селекта хэшмапу
+        for i in (self.options):
+            label_value[i.value] = i.label
+        #Отбираю нужные лейблы
+        for i in (value):
+            rez_label.append(label_value[i])
+        #-----------------------------#
+
+        mem_data[interaction.user.id].game_role = rez_label
 
 
 ####### 8 вопрос #######
@@ -183,13 +238,14 @@ async def q_8(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
     mes = await bot.wait_for('message', check=check)
-
+    mem_data[user.id].answer_q8 = mes.content  
 
 ####### 9 вопрос #######
 async def q_9(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
     mes = await bot.wait_for('message', check=check)
+    mem_data[user.id].age = mes.content 
 
     
 
@@ -215,7 +271,8 @@ class q_10(Select):
         custom_id="s_10")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ10")
+        value = interaction.data['values']
+        mem_data[interaction.user.id].shooting_skill = value
 
 
 ####### 11 вопрос
@@ -239,8 +296,8 @@ class q_11(Select):
         custom_id="s_11")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ11")
-
+        value = interaction.data['values']
+        mem_data[interaction.user.id].discipline = value
 
 ####### 12 вопрос
 class q_12(Select):
@@ -263,8 +320,8 @@ class q_12(Select):
         custom_id="s_12")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ12")
-
+        value = interaction.data['values']
+        mem_data[interaction.user.id].radio_exchange = value
 
 ####### 13 вопрос
 class q_13(Select):
@@ -278,7 +335,8 @@ class q_13(Select):
         custom_id="s_13")
     async def callback(self, interaction):
         await interaction.response.defer()
-        print("Ответ13")
+        value = interaction.data['values']
+        mem_data[interaction.user.id].answer_q13 = value
 
 
 ####### 14 вопрос #######
@@ -286,3 +344,4 @@ async def q_14(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
     mes = await bot.wait_for('message', check=check)
+    mem_data[user.id].answer_q14 = mes.content 

@@ -11,6 +11,7 @@ from discord.ui import Button, View, Select
 import numpy as np
 import question
 import embed
+import class_novob
 
 #Базовые структуры
 class Main(commands.Bot):
@@ -26,14 +27,13 @@ class main_but(View):
         await interaction.response.defer()
         print("main_but")
         await Clean_and_Intro_LS(interaction.user)
-        
-
 
 #Кнопка после ввода ответов на тест
 class main_resualt_but(View):
-    @discord.ui.button(label = "Закончить опрос", style=discord.ButtonStyle.danger)
+    @discord.ui.button(label = "Посмотреть результат опроса", style=discord.ButtonStyle.danger)
     async def button_callback(self, interaction, button):
         await interaction.response.defer()
+
 
 
 
@@ -42,10 +42,16 @@ class main_resualt_but(View):
 #Для отслеживания людей, которые не прошли собеседование в личных сообщений бота до конца
 mem_not_end_opr = []
 
-
-
 #Очистка сообщений + вызов функции
 async def Clean_and_Intro_LS(user):
+
+    #Проверка на то что пользователь ещё не проходит тест
+    if ((user.id in mem_not_end_opr) and (user.id in mem_data)):
+        return
+    else:
+        mem_not_end_opr.append(user.id)
+        question.mem_data[user.id] = class_novob.novob(user.id)
+
     # #Удаление сообщений
     # await user.send("Привет")
     # channel = bot.get_channel(user.dm_channel.id)
@@ -55,11 +61,6 @@ async def Clean_and_Intro_LS(user):
     #             await message.delete()
     #         except discord.errors.NotFound:
     #             pass
-
-    if user.id in mem_not_end_opr:
-        return
-    else:
-        mem_not_end_opr.append(user.id)
 
     await Intro_LS(user)
 
@@ -89,7 +90,6 @@ async def Intro_LS(user):
     await user.send(embed=e_2.emb, view = s)
     await bot.wait_for('interaction', check=check)
 
-
     #### 3 вопрос rdy
     sel = "s_3"
     s.clear_items()
@@ -97,6 +97,8 @@ async def Intro_LS(user):
     e_3 = embed.emb_2("Какой у тебя часовой пояс?")
     await user.send(embed=e_3.emb, view = s)
     await bot.wait_for('interaction', check=check)
+
+
 
     #### 4 вопрос rdy
     sel = "s_4"
@@ -106,6 +108,8 @@ async def Intro_LS(user):
     await user.send(embed=e_4.emb, view = s)
     await bot.wait_for('interaction', check=check)
 
+    
+
     #### 5 вопрос rdy
     sel = "s_5"
     s.clear_items()
@@ -114,6 +118,8 @@ async def Intro_LS(user):
     await user.send(embed=e_5.emb, view = s)
     await bot.wait_for('interaction', check=check)
 
+    # print(question.mem_data[user.id].id_hours)
+    # print(question.mem_data[user.id].hours)
     #### 6 вопрос rdy
     sel = "s_6"
     s.clear_items()
@@ -187,12 +193,40 @@ async def Intro_LS(user):
     #Результирующая кнопка 
     but_rez = main_resualt_but()
     await user.send(view=but_rez)
+    #Проверка на нажатие на кнопку результирующую тест
+    def check_in_end(interaction):
+        return ((interaction.user.id == user.id) and (interaction.channel.id == user.dm_channel.id) and (interaction.data['component_type'] == 2))
+    await bot.wait_for('interaction', check=check_in_end)
+
+    #Удаление кнопки
+    channel = bot.get_channel(user.dm_channel.id)
+    async for message in channel.history(limit=1):
+        if message.author.id == bot.user.id:
+            try:
+                await message.delete()
+            except discord.errors.NotFound:
+                pass
+
+    # #Эмбед результирующий
+    # emb_rez = discord.Embed(
+    # title="Вы прошли тест и выбрали следующие результаты",
+    # description=
+    # (
+    #     "Ваши роли\n" 
+
+    #     "Ваши роли\n" ""
 
 
 
-    print(mem_not_end_opr)
+        
+    #     # f"{question.mem_data[user.id].game_role}"  
+    # ),
+    #     color=discord.Color.from_rgb(255, 255, 255) # ебашим белой полосочкой, иначе некрасиво)
+    # )
+    # await user.send(embed=emb_rez)
+
+    del question.mem_data[user.id]
     mem_not_end_opr.remove(user.id)
-    print(mem_not_end_opr)
     return
 
 

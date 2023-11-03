@@ -4,10 +4,11 @@ import discord
 from discord.ext import commands
 from discord.ui import Button, View, Select
 import numpy as np
+import class_novob
 
-##############################################Эмбеды##############################################
+#Эмбеды
 
-######### Первый эмбед приветствия
+#Первый эмбед приветствия
 emb_1 = discord.Embed(
     title="Добро пожаловать в Академию ССО!",
     description=
@@ -22,7 +23,7 @@ emb_1 = discord.Embed(
     )
 
 
-############################################# эмбеды вопросов #############################################################
+#Эмбеды вопросов 
 class emb_2():
     def __init__(self, zagolovok):
         self.emb = discord.Embed(
