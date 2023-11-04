@@ -42,9 +42,13 @@ class main_end_but(View):
     @discord.ui.button(label = "Завершить тест", style=discord.ButtonStyle.danger)
     async def button_callback(self, interaction, button):
         await interaction.response.defer()
+        #Изменю никнейм
+        
         guild = bot.get_guild(res.id_server)
         id_v = interaction.user.id
         member = guild.get_member(id_v)
+        #Изменяю никнейм
+        # await member.edit(nick=question.mem_data[id_v].nick)
         #Добавляю не выбираемые роли
         for i in res.not_choice_role:
             role = guild.get_role(i)
@@ -65,9 +69,10 @@ class main_end_but(View):
         await member.add_roles(role)
         #Добавляю роли второстепенных ролей в игре
         for i in question.mem_data[id_v].id_game_role:
-            print(question.mem_data[id_v].id_hours)
             role = guild.get_role(i)
             await member.add_roles(role)
+        #Удаляю массив с ролями 
+        del question.mem_data[id_v]
         
 
 
@@ -281,20 +286,19 @@ async def Intro_LS(user):
         return ((interaction.user.id == user.id) and (interaction.channel.id == user.dm_channel.id) and (interaction.data['component_type'] == 2))
     await bot.wait_for('interaction', check=check_in_end)
 
-    # #Удаление сообщений бота
-    # channel = bot.get_channel(user.dm_channel.id)
-    # async for message in channel.history(limit=None):
-    #     if message.author.id == bot.user.id:
-    #         try:
-    #             await message.delete()
-    #         except discord.errors.NotFound:
-    #             pass
+    #Удаление сообщений бота
+    channel = bot.get_channel(user.dm_channel.id)
+    async for message in channel.history(limit=None):
+        if message.author.id == bot.user.id:
+            try:
+                await message.delete()
+            except discord.errors.NotFound:
+                pass
     #Отправляю в канал с формами
     channel = bot.get_channel(res.id_chanel_whitch_form)
     await channel.send("Новая форма")  
     await channel.send(embed=result_emb)  
 
-    del question.mem_data[user.id]
     mem_not_end_opr.remove(user.id)
     return
 
