@@ -24,8 +24,14 @@ bot = Main(command_prefix = "Многоуважаемый дежурный по 
 class main_but(View):
     @discord.ui.button(label = "Пройти опрос", style=discord.ButtonStyle.primary)
     async def button_callback(self, interaction, button):
-        await interaction.response.defer()
-        await Clean_and_Intro_LS(interaction.user)
+        await interaction.response.defer()  
+        #Добавить try except, для обработки исключений.
+        # try:
+        #     await Clean_and_Intro_LS(interaction.user)
+        # except:
+        #     #очистить массивы
+        await Clean_and_Intro_LS(interaction.user)   
+        await interaction.message.delete()
 
 #Кнопка после ввода ответов на тест
 class main_resualt_but(View):
@@ -33,10 +39,6 @@ class main_resualt_but(View):
     async def button_callback(self, interaction, button):
         await interaction.response.defer()
         
-# guild = interaction.guild
-# role = guild.get_role(1168950768657772596)
-# await interaction.user.add_roles(role)
-
 #Кнопка завершающая
 class main_end_but(View):
     @discord.ui.button(label = "Завершить тест", style=discord.ButtonStyle.danger)
@@ -48,7 +50,9 @@ class main_end_but(View):
         id_v = interaction.user.id
         member = guild.get_member(id_v)
         #Изменяю никнейм
-        # await member.edit(nick=question.mem_data[id_v].nick)
+        nick_ser = question.mem_data[id_v].nick
+        nick_ser = "Новобранец | " + nick_ser
+        await member.edit(nick = nick_ser)
         #Добавляю не выбираемые роли
         for i in res.not_choice_role:
             role = guild.get_role(i)
