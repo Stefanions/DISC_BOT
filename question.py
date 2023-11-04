@@ -24,10 +24,10 @@ class q_2(Select):
         min_values = 1,
         max_values = 4,
         options=[
-        discord.SelectOption(label="Утром по МСК", value="1"),
-        discord.SelectOption(label="Днём по МСК", value="2"),
-        discord.SelectOption(label="Вечером по МСК", value="3"),
-        discord.SelectOption(label="Ночью по МСК", value="4")
+        discord.SelectOption(label="Утром по МСК", value=res.q_2_1),
+        discord.SelectOption(label="Днём по МСК", value=res.q_2_2),
+        discord.SelectOption(label="Вечером по МСК", value=res.q_2_3),
+        discord.SelectOption(label="Ночью по МСК", value=res.q_2_4)
         ], 
         custom_id="s_2"
         )
@@ -97,7 +97,7 @@ class q_3(Select):
         custom_id="s_3")
     async def callback(self, interaction):
         await interaction.response.defer()
-        value = interaction.data['values']
+        value = interaction.data['values'][0]
         mem_data[interaction.user.id].time_zone = value
 
 
@@ -107,13 +107,13 @@ class q_4(Select):
         super().__init__(
         placeholder="Список большой, листай вниз!", 
         options=[
-        discord.SelectOption(label="0-50 часов", value="5"),
-        discord.SelectOption(label="50+ часов", value="6"),
-        discord.SelectOption(label="100+ часов", value="7"),
-        discord.SelectOption(label="250+ часов", value="8"),
-        discord.SelectOption(label="500+ часов", value="9"),
-        discord.SelectOption(label="1000+ часов", value="10"),
-        discord.SelectOption(label="2000+ часов", value="11")
+        discord.SelectOption(label="0-50 часов", value=res.q_4_1),
+        discord.SelectOption(label="50+ часов", value=res.q_4_2),
+        discord.SelectOption(label="100+ часов", value=res.q_4_3),
+        discord.SelectOption(label="250+ часов", value=res.q_4_4),
+        discord.SelectOption(label="500+ часов", value=res.q_4_5),
+        discord.SelectOption(label="1000+ часов", value=res.q_4_6),
+        discord.SelectOption(label="2000+ часов", value=res.q_4_7)
         ], 
         custom_id="s_4")
     async def callback(self, interaction):
@@ -136,14 +136,14 @@ class q_5(Select):
         super().__init__(
         placeholder="Список большой, листай вниз!", 
         options=[
-        discord.SelectOption(label="CMD подразделение", value="12"),
-        discord.SelectOption(label="Атакующее подразделение", value="13"),
-        discord.SelectOption(label="ДРГ подразделение", value="14"),
-        discord.SelectOption(label="Оборонительное подразделение", value="15"),
-        discord.SelectOption(label="Стройбат подразделение", value="16"),
-        discord.SelectOption(label="Минометное подразделение", value="17"),
-        discord.SelectOption(label="Техническое подразделение", value="18"),
-        discord.SelectOption(label="Пилотное подразделение", value="19")
+        discord.SelectOption(label="CMD подразделение", value=res.q_5_1),
+        discord.SelectOption(label="Атакующее подразделение", value=res.q_5_2),
+        discord.SelectOption(label="ДРГ подразделение", value=res.q_5_3),
+        discord.SelectOption(label="Оборонительное подразделение", value=res.q_5_4),
+        discord.SelectOption(label="Стройбат подразделение", value=res.q_5_5),
+        discord.SelectOption(label="Минометное подразделение", value=res.q_5_6),
+        discord.SelectOption(label="Техническое подразделение", value=res.q_5_7),
+        discord.SelectOption(label="Пилотное подразделение", value=res.q_5_8)
         ], 
         custom_id="s_5")
     async def callback(self, interaction):
@@ -164,18 +164,19 @@ class q_6(Select):
         super().__init__(
         placeholder="Список большой, листай вниз!", 
         options=[
-        discord.SelectOption(label="CMD", value="20"),
-        discord.SelectOption(label="Сквадной", value="21"),
-        discord.SelectOption(label="Лидер Фаер Тимы", value="22"),
-        discord.SelectOption(label="Обычный стрелок", value="23"),
-        discord.SelectOption(label="Стрелок ГП", value="24"),
-        discord.SelectOption(label="Труба", value="25"),
-        discord.SelectOption(label="Медик", value="26"),
-        discord.SelectOption(label="Пулеметчик", value="27"),
-        discord.SelectOption(label="Такнкист-командир", value="28"),
-        discord.SelectOption(label="Танкист-водитель", value="29"),
-        discord.SelectOption(label="Танкист-стрелок", value="30"),
-        discord.SelectOption(label="Пилот", value="31")
+        discord.SelectOption(label="CMD", value=res.q_6_1),
+        discord.SelectOption(label="Сквадной", value=res.q_6_2),
+        discord.SelectOption(label="Лидер Фаер Тимы", value=res.q_6_3),
+        discord.SelectOption(label="Обычный стрелок", value=res.q_6_4),
+        discord.SelectOption(label="Стрелок ГП", value=res.q_6_5),
+        discord.SelectOption(label="Труба", value=res.q_6_6),
+        discord.SelectOption(label="Тандем", value=res.q_6_7),
+        discord.SelectOption(label="Медик", value=res.q_6_8),
+        discord.SelectOption(label="Пулеметчик", value=res.q_6_9),
+        discord.SelectOption(label="Танкист-командир", value=res.q_6_10),
+        discord.SelectOption(label="Танкист-водитель", value=res.q_6_11),
+        discord.SelectOption(label="Танкист-стрелок", value=res.q_6_12),
+        discord.SelectOption(label="Пилот", value=res.q_6_13)
         ], 
         custom_id="s_6")
     async def callback(self, interaction):
@@ -199,26 +200,26 @@ class q_7(Select):
         min_values = 2,
         max_values = 12,
         options=[
-        discord.SelectOption(label="CMD", value="32"),
-        discord.SelectOption(label="Сквадной", value="33"),
-        discord.SelectOption(label="Лидер Фаер Тимы", value="34"),
-        discord.SelectOption(label="Обычный стрелок", value="35"),
-        discord.SelectOption(label="Стрелок ГП", value="36"),
-        discord.SelectOption(label="Труба", value="37"),
-        discord.SelectOption(label="Медик", value="38"),
-        discord.SelectOption(label="Пулеметчик", value="39"),
-        discord.SelectOption(label="Такнкист-командир", value="40"),
-        discord.SelectOption(label="Танкист-водитель", value="41"),
-        discord.SelectOption(label="Танкист-стрелок", value="42"),
-        discord.SelectOption(label="Пилот", value="43")
+        discord.SelectOption(label="CMD", value=res.q_7_1),
+        discord.SelectOption(label="Сквадной", value=res.q_7_2),
+        discord.SelectOption(label="Лидер Фаер Тимы", value=res.q_7_3),
+        discord.SelectOption(label="Стрелок ГП", value=res.q_7_4),
+        discord.SelectOption(label="Труба", value=res.q_7_5),
+        discord.SelectOption(label="Тандем", value=res.q_7_6),
+        discord.SelectOption(label="Медик", value=res.q_7_7),
+        discord.SelectOption(label="Пулеметчик", value=res.q_7_8),
+        discord.SelectOption(label="Такнкист-командир", value=res.q_7_9),
+        discord.SelectOption(label="Танкист-водитель", value=res.q_7_10),
+        discord.SelectOption(label="Танкист-стрелок", value=res.q_7_11),
+        discord.SelectOption(label="Пилот", value=res.q_7_12)
         ], 
         custom_id="s_7")
+
     async def callback(self, interaction):
         await interaction.response.defer()
         value = interaction.data['values']
         value_int = [int(x) for x in value]
         mem_data[interaction.user.id].id_game_role = value_int
-
         #-----------------------------#
         label_value = {}
         rez_label = []
@@ -272,7 +273,7 @@ class q_10(Select):
     async def callback(self, interaction):
         await interaction.response.defer()
         value = interaction.data['values']
-        mem_data[interaction.user.id].shooting_skill = value
+        mem_data[interaction.user.id].shooting_skill = value[0]
 
 
 ####### 11 вопрос
@@ -297,7 +298,7 @@ class q_11(Select):
     async def callback(self, interaction):
         await interaction.response.defer()
         value = interaction.data['values']
-        mem_data[interaction.user.id].discipline = value
+        mem_data[interaction.user.id].discipline = value[0]
 
 ####### 12 вопрос
 class q_12(Select):
@@ -321,7 +322,7 @@ class q_12(Select):
     async def callback(self, interaction):
         await interaction.response.defer()
         value = interaction.data['values']
-        mem_data[interaction.user.id].radio_exchange = value
+        mem_data[interaction.user.id].radio_exchange = value[0]
 
 ####### 13 вопрос
 class q_13(Select):
@@ -336,7 +337,7 @@ class q_13(Select):
     async def callback(self, interaction):
         await interaction.response.defer()
         value = interaction.data['values']
-        mem_data[interaction.user.id].answer_q13 = value
+        mem_data[interaction.user.id].answer_q13 = value[0]
 
 
 ####### 14 вопрос #######

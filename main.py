@@ -18,23 +18,57 @@ class Main(commands.Bot):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-bot = Main(command_prefix = ".",intents = discord.Intents.all(),help_command = None)
+bot = Main(command_prefix = "Многоуважаемый дежурный по булочкам ",intents = discord.Intents.all(),help_command = None)
 ###########################################Классы кнопок########################################
 #Кнопка при вступлении
 class main_but(View):
-    @discord.ui.button(label = "Пройти опрос", style=discord.ButtonStyle.danger)
+    @discord.ui.button(label = "Пройти опрос", style=discord.ButtonStyle.primary)
     async def button_callback(self, interaction, button):
         await interaction.response.defer()
-        print("main_but")
         await Clean_and_Intro_LS(interaction.user)
 
 #Кнопка после ввода ответов на тест
 class main_resualt_but(View):
-    @discord.ui.button(label = "Посмотреть результат опроса", style=discord.ButtonStyle.danger)
+    @discord.ui.button(label = "Продолжить", style=discord.ButtonStyle.success)
     async def button_callback(self, interaction, button):
         await interaction.response.defer()
+        
+# guild = interaction.guild
+# role = guild.get_role(1168950768657772596)
+# await interaction.user.add_roles(role)
 
-
+#Кнопка завершающая
+class main_end_but(View):
+    @discord.ui.button(label = "Завершить тест", style=discord.ButtonStyle.danger)
+    async def button_callback(self, interaction, button):
+        await interaction.response.defer()
+        guild = bot.get_guild(res.id_server)
+        id_v = interaction.user.id
+        member = guild.get_member(id_v)
+        #Добавляю не выбираемые роли
+        for i in res.not_choice_role:
+            role = guild.get_role(i)
+            await member.add_roles(role)
+        #Добавляю роли мейн тайма
+        for i in question.mem_data[id_v].id_main_time:
+            role = guild.get_role(i)
+            await member.add_roles(role)
+        #Добавляю роль колличество часов
+        print(question.mem_data[id_v].id_hours)
+        role = guild.get_role(question.mem_data[id_v].id_hours)
+        await member.add_roles(role)
+        #Добавляю роль главного направления
+        role = guild.get_role(question.mem_data[id_v].id_direction)
+        await member.add_roles(role)
+        #Добавляю роль главной роли в игре
+        role = guild.get_role(question.mem_data[id_v].id_main_game_role)
+        await member.add_roles(role)
+        #Добавляю роли второстепенных ролей в игре
+        for i in question.mem_data[id_v].id_game_role:
+            print(question.mem_data[id_v].id_hours)
+            role = guild.get_role(i)
+            await member.add_roles(role)
+        
 
 
 ###########################################Функциии разные########################################
@@ -46,21 +80,21 @@ mem_not_end_opr = []
 async def Clean_and_Intro_LS(user):
 
     #Проверка на то что пользователь ещё не проходит тест
-    if ((user.id in mem_not_end_opr) and (user.id in mem_data)):
+    if ((user.id in mem_not_end_opr) and (user.id in question.mem_data)):
         return
     else:
         mem_not_end_opr.append(user.id)
         question.mem_data[user.id] = class_novob.novob(user.id)
 
-    # #Удаление сообщений
-    # await user.send("Привет")
-    # channel = bot.get_channel(user.dm_channel.id)
-    # async for message in channel.history(limit=None):
-    #     if message.author.id == bot.user.id:
-    #         try:
-    #             await message.delete()
-    #         except discord.errors.NotFound:
-    #             pass
+    #Удаление сообщений
+    await user.send("Привет")
+    channel = bot.get_channel(user.dm_channel.id)
+    async for message in channel.history(limit=None):
+        if message.author.id == bot.user.id:
+            try:
+                await message.delete()
+            except discord.errors.NotFound:
+                pass
 
     await Intro_LS(user)
 
@@ -98,8 +132,6 @@ async def Intro_LS(user):
     await user.send(embed=e_3.emb, view = s)
     await bot.wait_for('interaction', check=check)
 
-
-
     #### 4 вопрос rdy
     sel = "s_4"
     s.clear_items()
@@ -107,8 +139,6 @@ async def Intro_LS(user):
     e_4 = embed.emb_2("Сколько у тебя часов в SQUAD?")
     await user.send(embed=e_4.emb, view = s)
     await bot.wait_for('interaction', check=check)
-
-    
 
     #### 5 вопрос rdy
     sel = "s_5"
@@ -118,8 +148,6 @@ async def Intro_LS(user):
     await user.send(embed=e_5.emb, view = s)
     await bot.wait_for('interaction', check=check)
 
-    # print(question.mem_data[user.id].id_hours)
-    # print(question.mem_data[user.id].hours)
     #### 6 вопрос rdy
     sel = "s_6"
     s.clear_items()
@@ -194,9 +222,9 @@ async def Intro_LS(user):
     but_rez = main_resualt_but()
     await user.send(view=but_rez)
     #Проверка на нажатие на кнопку результирующую тест
-    def check_in_end(interaction):
+    def check_in_rez(interaction):
         return ((interaction.user.id == user.id) and (interaction.channel.id == user.dm_channel.id) and (interaction.data['component_type'] == 2))
-    await bot.wait_for('interaction', check=check_in_end)
+    await bot.wait_for('interaction', check=check_in_rez)
 
     #Удаление кнопки
     channel = bot.get_channel(user.dm_channel.id)
@@ -207,23 +235,64 @@ async def Intro_LS(user):
             except discord.errors.NotFound:
                 pass
 
-    # #Эмбед результирующий
-    # emb_rez = discord.Embed(
-    # title="Вы прошли тест и выбрали следующие результаты",
-    # description=
-    # (
-    #     "Ваши роли\n" 
 
-    #     "Ваши роли\n" ""
+    result_emb = discord.Embed(
+        title="Ваши ответы на наши вопросы:",
+        description=(
+            f"_**1. Какой у тебя ник в игре?**_\n{question.mem_data[user.id].nick}\n\n"
+            
+            f"_**2. В какое время относительно МСК ты играешь в основном?**_\n{', '.join(question.mem_data[user.id].main_time)}\n\n"
+
+            f"_**3. Какой у тебя часовой пояс?**_\n{question.mem_data[user.id].time_zone}\n\n"
+            
+            f"_**4. Сколько у тебя часов в SQUAD?**_\n{question.mem_data[user.id].hours}\n\n"
+
+            f"_**5. Какое направление тебе нравится больше всего?**_\n{question.mem_data[user.id].direction}\n\n"
+
+            f"_**6. Выбери одну роль (стрелковую специальность), номер один для тебя?**_\n{question.mem_data[user.id].main_game_role}\n\n"
+
+            f"_**7. Выбери дополнительные 2 или более роли, помимо основной. Напиши их ниже.**_\n{', '.join(question.mem_data[user.id].game_role)}\n\n"
+
+            f"_**8. Ты понимаешь, что для того, чтобы играть командно, нужно, чтобы все делали одинаково? **_\n{question.mem_data[user.id].answer_q8}\n\n"
+
+            f"_**9. Сколько тебе лет?**_\n{question.mem_data[user.id].age}\n\n"
+
+            f"_**10. Оцени самостоятельно навык твоей стрельбы в SQUAD?**_\n{question.mem_data[user.id].shooting_skill}\n\n"
+
+            f"_**11. Насколько ты считаешь себя дисциплинированным игроком, если играешь в отряде?**_\n{question.mem_data[user.id].discipline}\n\n"
+
+            f"_**12. Как ты считаешь, насколько ты хорош при радиообмене от 0 до 10?**_\n{question.mem_data[user.id].radio_exchange}\n\n"
+
+            f"_**13. Ты хочешь играть серьезные игры в SQUAD? (Считай что это киберспорт, но только в скваде)**_\n{question.mem_data[user.id].answer_q13}\n\n"
+
+            f"_**14. Откуда вы о нас узнали? Если вас пригласили, обязательно напишите ник человека, кто это сделал (Хотя бы примерный, мы поймем xD)**_\n{question.mem_data[user.id].answer_q14}"
+        ),
+        color=discord.Color.from_rgb(152, 41, 101)
+        )
+    result_emb.set_footer(text="Created by Zyu & _Osha_")
+    
+    await user.send(embed=result_emb)
 
 
+    but_end = main_end_but()
+    await user.send(view=but_end)
+    #Проверка на нажатие на кнопку заканачивающую тест
+    def check_in_end(interaction):
+        return ((interaction.user.id == user.id) and (interaction.channel.id == user.dm_channel.id) and (interaction.data['component_type'] == 2))
+    await bot.wait_for('interaction', check=check_in_end)
 
-        
-    #     # f"{question.mem_data[user.id].game_role}"  
-    # ),
-    #     color=discord.Color.from_rgb(255, 255, 255) # ебашим белой полосочкой, иначе некрасиво)
-    # )
-    # await user.send(embed=emb_rez)
+    # #Удаление сообщений бота
+    # channel = bot.get_channel(user.dm_channel.id)
+    # async for message in channel.history(limit=None):
+    #     if message.author.id == bot.user.id:
+    #         try:
+    #             await message.delete()
+    #         except discord.errors.NotFound:
+    #             pass
+    #Отправляю в канал с формами
+    channel = bot.get_channel(res.id_chanel_whitch_form)
+    await channel.send("Новая форма")  
+    await channel.send(embed=result_emb)  
 
     del question.mem_data[user.id]
     mem_not_end_opr.remove(user.id)
@@ -233,11 +302,10 @@ async def Intro_LS(user):
 
 
 
-
 #При включении бота
 @bot.event
 async def on_ready():
-    channel = bot.get_channel(1168950770364858425)
+    channel = bot.get_channel(res.id_hochu_v_cadetku)
     #Удаление сообщений
     async for message in channel.history(limit=None):
         if message.author.id == bot.user.id:
@@ -250,7 +318,10 @@ async def on_ready():
     but_main = main_but()
     await channel.send("Я начал работу", view=but_main)
 
-
+#КЕК
+@bot.command()
+async def привет(ctx):
+    await ctx.send("Пошёл нахуй")
 
 
 bot.run(res.token)

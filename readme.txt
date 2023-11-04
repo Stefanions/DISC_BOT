@@ -173,3 +173,10 @@ async def on_select(ctx, interaction):
 
 
  https://gist.github.com/AkshuAgarwal/bc7d45bcecd5d29de4d6d7904e8b8bd8#examples - крутые команды.
+
+         channel = bot.get_channel(res.id_chanel_whitch_form)
+        guild = interaction.guild
+        print(interaction.guild.roles)
+        for i in interaction.guild.roles:
+            await channel.send(f"{i.name}-{i.id}")  
+        print("main_but")
