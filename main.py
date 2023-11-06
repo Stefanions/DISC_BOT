@@ -12,6 +12,7 @@ import numpy as np
 import question
 import embed
 import class_novob
+import time
 
 #Базовые структуры
 class Main(commands.Bot):
@@ -25,11 +26,22 @@ class main_but(View):
     @discord.ui.button(label = "Пройти опрос", style=discord.ButtonStyle.primary)
     async def button_callback(self, interaction, button):
         await interaction.response.defer()  
-        #Добавить try except, для обработки исключений.
-        # try:
-        #     await Clean_and_Intro_LS(interaction.user)
-        # except:
-        #     #очистить массивы
+        try:
+            await Clean_and_Intro_LS(interaction.user)
+        except:
+            channel = bot.get_channel(interaction.user.dm_channel.id)
+            await channel.send("Произошла техническая ошибка, через 10 секунд все сообщения бота тут удалятся.\nПосле этого зайдите обратно на сервер и снова нажмите кнопку пройти опрос")
+            time.sleep(10)
+            #Удаляю сообщения
+            async for message in channel.history(limit=None):
+                if message.author.id == bot.user.id:
+                    try:
+                        await message.delete()
+                    except discord.errors.NotFound:
+                        pass
+            #Очищаю массивы
+            mem_not_end_opr.remove(interaction.user.id)
+            del question.mem_data[interaction.user.id]
         await Clean_and_Intro_LS(interaction.user)   
         await interaction.message.delete()
 
@@ -114,6 +126,7 @@ async def Intro_LS(user):
         custom_id = interaction.data['custom_id']
         return ((interaction.user.id == user.id) and (interaction.channel.id == user.dm_channel.id) and (custom_id == sel))
 
+    print(a)
     #Тут создаю окошечко для наших селектов и строк
     s = View()
     
