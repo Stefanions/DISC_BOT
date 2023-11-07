@@ -24,7 +24,7 @@ bot = Main(command_prefix = "Многоуважаемый дежурный по 
 async def on_error(user):
     print("HUY")
     channel = bot.get_channel(user.dm_channel.id)
-    await channel.send("Произошла техническая ошибка, через 10 секунд все сообщения бота тут удалятся.\nПосле того как все сообщения удаляться, зайдите обратно на сервер и снова нажмите кнопку пройти опрос")
+    await channel.send("Произошла техническая ошибка или вы очень долго отвечали на вопрос.\n Через 10 секунд все сообщения бота тут удалятся.\nПосле того как все сообщения удаляться, зайдите обратно на сервер и снова нажмите кнопку пройти опрос")
     time.sleep(10)
     
     #Удаляю сообщения
@@ -41,6 +41,8 @@ async def on_error(user):
     except:
         pass
 
+#Время ожидания ответа
+time_wait = question.time_wait
 ###########################################Классы кнопок########################################
 #Кнопка при вступлении
 class main_but(View):
@@ -51,7 +53,6 @@ class main_but(View):
             await Clean_and_Intro_LS(interaction.user)
         except Exception:
             await on_error(interaction.user)
-        #await interaction.message.delete()
 
 #Кнопка после ввода ответов на тест
 class main_resualt_but(View):
@@ -96,6 +97,8 @@ class main_end_but(View):
                 await member.add_roles(role)
             #Удаляю массив с ролями 
             del question.mem_data[id_v]
+            channel = bot.get_channel(res.id_chanel_pogovorim_tut)
+            await channel.send(f"У нас новенький <@{interaction.user.id}>\nДобро пожаловать в академию!\nУспехов в учёбе!")
         except:
             await on_error(interaction.user)
             guild = bot.get_guild(res.id_server)
@@ -158,7 +161,7 @@ async def Intro_LS(user):
         e_2 = embed.emb_2("В какое время относительно МСК ты играешь в основном?")
         s.add_item(question.q_2())
         await user.send(embed=e_2.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 3 вопрос rdy
         sel = "s_3"
@@ -166,7 +169,7 @@ async def Intro_LS(user):
         s.add_item(question.q_3())
         e_3 = embed.emb_2("Какой у тебя часовой пояс?")
         await user.send(embed=e_3.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 4 вопрос rdy
         sel = "s_4"
@@ -174,7 +177,7 @@ async def Intro_LS(user):
         s.add_item(question.q_4())
         e_4 = embed.emb_2("Сколько у тебя часов в SQUAD?")
         await user.send(embed=e_4.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 5 вопрос rdy
         sel = "s_5"
@@ -182,7 +185,7 @@ async def Intro_LS(user):
         s.add_item(question.q_5())
         e_5 = embed.emb_2("Какое направление тебе нравится больше всего?")
         await user.send(embed=e_5.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 6 вопрос rdy
         sel = "s_6"
@@ -190,7 +193,7 @@ async def Intro_LS(user):
         s.add_item(question.q_6())
         e_6 = embed.emb_2("Выбери одну роль (стрелковую специальность), номер один для тебя?")
         await user.send(embed=e_6.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 7 вопрос rdy
         sel = "s_7"
@@ -198,7 +201,7 @@ async def Intro_LS(user):
         s.add_item(question.q_7())
         e_7 = embed.emb_2("Выбери дополнительные 2 или более роли, помимо основной. Напиши их ниже.")
         await user.send(embed=e_7.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
         
         #### 8 вопрос
         sel = "s_8"
@@ -220,7 +223,7 @@ async def Intro_LS(user):
         e_10 = embed.emb_2("Оцени самостоятельно навык твоей стрельбы в SQUAD? от 0 до 10")
         s.add_item(question.q_10())
         await user.send(embed=e_10.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 11 вопрос rdy
         sel = "s_11"
@@ -228,7 +231,7 @@ async def Intro_LS(user):
         e_11 = embed.emb_2("Насколько ты считаешь себя дисциплинированным игроком, если играешь в отряде? От 0 до 10")
         s.add_item(question.q_11())
         await user.send(embed=e_11.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 12 вопрос rdy
         sel = "s_12"
@@ -236,7 +239,7 @@ async def Intro_LS(user):
         e_12 = embed.emb_2("Как ты считаешь, насколько ты хорош при радиообмене от 0 до 10?")
         s.add_item(question.q_12())
         await user.send(embed=e_12.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 13 вопрос rdy
         sel = "s_13"
@@ -244,7 +247,7 @@ async def Intro_LS(user):
         e_13 = embed.emb_2("Ты хочешь играть серьезные игры в SQUAD? (Считай что это киберспорт, но только в скваде)")
         s.add_item(question.q_13())
         await user.send(embed=e_13.emb, view = s)
-        await bot.wait_for('interaction', check=check)
+        await bot.wait_for('interaction', check=check, timeout=time_wait)
 
         #### 14 вопрос
         sel = "s_14"
@@ -260,7 +263,7 @@ async def Intro_LS(user):
         #Проверка на нажатие на кнопку результирующую тест
         def check_in_rez(interaction):
             return ((interaction.user.id == user.id) and (interaction.channel.id == user.dm_channel.id) and (interaction.data['component_type'] == 2))
-        await bot.wait_for('interaction', check=check_in_rez)
+        await bot.wait_for('interaction', check=check_in_rez, timeout=time_wait)
 
         #Удаление кнопки
         channel = bot.get_channel(user.dm_channel.id)
@@ -315,7 +318,7 @@ async def Intro_LS(user):
         #Проверка на нажатие на кнопку заканачивающую тест
         def check_in_end(interaction):
             return ((interaction.user.id == user.id) and (interaction.channel.id == user.dm_channel.id) and (interaction.data['component_type'] == 2))
-        await bot.wait_for('interaction', check=check_in_end)
+        await bot.wait_for('interaction', check=check_in_end, timeout=time_wait)
 
         #Удаление сообщений бота
         channel = bot.get_channel(user.dm_channel.id)
@@ -325,9 +328,10 @@ async def Intro_LS(user):
                     await message.delete()
                 except discord.errors.NotFound:
                     pass
+
         #Отправляю в канал с формами
         channel = bot.get_channel(res.id_chanel_whitch_form)
-        await channel.send("Новая форма")  
+        await channel.send(f"Новая форма\n<@{res.id_acad}> <@{res.id_nach_otdela}> <@{res.id_nach_shtab}>")  
         await channel.send(embed=result_emb)  
 
         try:

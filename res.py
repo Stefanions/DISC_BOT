@@ -18,8 +18,16 @@ token = "MTE2ODk1NDM0MDI3OTU5OTE4NA.GFLeyp.u6qIKhSmz0fQHM4k3DlHv2C9XbRginkbKExqE
 ###########################################
 #Тестовый сервер
 id_hochu_v_cadetku = 1168950770364858425
+#id канала с формами
 id_chanel_whitch_form = 1168950770574561280
+#id кого тегать в канале с формами
+id_acad = 1168950768674541610
+id_nach_otdela = 1168950768674541612
+id_nach_shtab = 1168950768674541614    
+
+
 id_server = 1168950768460640357
+id_chanel_pogovorim_tut = 1168950770574561287
 
 #Основной сервер
 # id_hochu_v_cadetku = 1090007128133075027

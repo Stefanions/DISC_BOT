@@ -8,12 +8,15 @@ import numpy as np
 #HASH_MAP для запоминания ответов людей, которые проходят тест
 mem_data = {}
 
+#Время ожидания ответа
+time_wait = 120.0
+
 ##############################################Селекты и не только + разные конструкции##############################################
 ####### 1 вопрос #######
 async def q_1(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
-    mes = await bot.wait_for('message', check=check)
+    mes = await bot.wait_for('message', check=check, timeout=time_wait)
     mem_data[user.id].nick = mes.content  
 
 ####### 2 вопрос #######
@@ -174,7 +177,7 @@ class q_6(Select):
         discord.SelectOption(label="Медик", value=res.q_6_8),
         discord.SelectOption(label="Пулеметчик", value=res.q_6_9),
         discord.SelectOption(label="Танкист-командир", value=res.q_6_10),
-        discord.SelectOption(label="Танкист-водитель", value=res.q_6_11),
+        discord.SelectOption(label="Танкист-мехвод", value=res.q_6_11),
         discord.SelectOption(label="Танкист-стрелок", value=res.q_6_12),
         discord.SelectOption(label="Пилот", value=res.q_6_13)
         ], 
@@ -209,7 +212,7 @@ class q_7(Select):
         discord.SelectOption(label="Медик", value=res.q_7_7),
         discord.SelectOption(label="Пулеметчик", value=res.q_7_8),
         discord.SelectOption(label="Такнкист-командир", value=res.q_7_9),
-        discord.SelectOption(label="Танкист-водитель", value=res.q_7_10),
+        discord.SelectOption(label="Танкист-мехвод", value=res.q_7_10),
         discord.SelectOption(label="Танкист-стрелок", value=res.q_7_11),
         discord.SelectOption(label="Пилот", value=res.q_7_12)
         ], 
@@ -238,14 +241,14 @@ class q_7(Select):
 async def q_8(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
-    mes = await bot.wait_for('message', check=check)
+    mes = await bot.wait_for('message', check=check, timeout=time_wait)
     mem_data[user.id].answer_q8 = mes.content  
 
 ####### 9 вопрос #######
 async def q_9(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
-    mes = await bot.wait_for('message', check=check)
+    mes = await bot.wait_for('message', check=check, timeout=time_wait)
     mem_data[user.id].age = mes.content 
 
     
@@ -344,5 +347,5 @@ class q_13(Select):
 async def q_14(user, bot):
     def check(message):
         return ((message.author.id == user.id) and (message.channel.id == user.dm_channel.id))
-    mes = await bot.wait_for('message', check=check)
+    mes = await bot.wait_for('message', check=check, timeout=time_wait)
     mem_data[user.id].answer_q14 = mes.content 
