@@ -331,7 +331,7 @@ async def Intro_LS(user):
 
         #Отправляю в канал с формами
         channel = bot.get_channel(res.id_chanel_whitch_form)
-        await channel.send(f"Новая форма\n<@{res.id_acad}> <@{res.id_nach_otdela}> <@{res.id_nach_shtab}>")  
+        await channel.send(f"Новая форма\n<@&{res.id_acad}> <@&{res.id_nach_otdela}> <@&{res.id_nach_shtab}>")  
         await channel.send(embed=result_emb)  
 
         try:
