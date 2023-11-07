@@ -13,6 +13,7 @@ import question
 import embed
 import class_novob
 import time
+import keep_alive
 
 #Базовые структуры
 class Main(commands.Bot):
@@ -343,5 +344,5 @@ async def on_ready():
 async def привет(ctx):
     await ctx.send("Пошёл нахуй")
 
-
+keep_alive.keep_alive()
 bot.run(res.token)
